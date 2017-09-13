@@ -8,24 +8,24 @@ from xlutils.copy import copy
 import time
 import winsound
 
-#Æó²é²éÍøÕ¾ÅÀ³æÀà
+#ä¼æŸ¥æŸ¥ç½‘ç«™çˆ¬è™«ç±»
 class EnterpriseInfoSpider:
     def __init__(self):
 
-        #ÎÄ¼şÏà¹Ø
+        #æ–‡ä»¶ç›¸å…³
         self.excelPath = 'enterprise_data.xls'
         self.sheetName = 'details'
         self.workbook = None
         self.table = None
         self.beginRow = None
 
-        # Ä¿Â¼Ò³
+        # ç›®å½•é¡µ
         self.catalogUrl = "http://www.qichacha.com/search_index"
 
-        # ÏêÇéÒ³£¨Ç°×º+firmXXXX+ºó×º£©
+        # è¯¦æƒ…é¡µï¼ˆå‰ç¼€+firmXXXX+åç¼€ï¼‰
         self.detailsUrl = "http://www.qichacha.com/company_getinfos"
 
-        self.cookie = raw_input("ÇëÊäÈëcookie:").decode("gbk").encode("utf-8")
+        self.cookie = raw_input("è¯·è¾“å…¥cookie:").decode("gbk").encode("utf-8")
         self.host = "www.qichacha.com"
         self.userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
 
@@ -35,26 +35,26 @@ class EnterpriseInfoSpider:
             "user-agent" : self.userAgent
         }
 
-        #Êı¾İ×Ö¶ÎÃû17¸ö
-        self.fields = ['¹«Ë¾Ãû³Æ','µç»°ºÅÂë','ÓÊÏä','Í³Ò»Éç»áĞÅÓÃ´úÂë','×¢²áºÅ','×éÖ¯»ú¹¹´úÂë','¾­Óª×´Ì¬','¹«Ë¾ÀàĞÍ','³ÉÁ¢ÈÕÆÚ','·¨¶¨´ú±íÈË','×¢²á×Ê±¾',
-                       'ÓªÒµÆÚÏŞ','µÇ¼Ç»ú¹Ø','·¢ÕÕÈÕÆÚ','¹«Ë¾¹æÄ£','ËùÊôĞĞÒµ','Ó¢ÎÄÃû','ÔøÓÃÃû','ÆóÒµµØÖ·','¾­Óª·¶Î§']
+        #æ•°æ®å­—æ®µå17ä¸ª
+        self.fields = ['å…¬å¸åç§°','ç”µè¯å·ç ','é‚®ç®±','ç»Ÿä¸€ç¤¾ä¼šä¿¡ç”¨ä»£ç ','æ³¨å†Œå·','ç»„ç»‡æœºæ„ä»£ç ','ç»è¥çŠ¶æ€','å…¬å¸ç±»å‹','æˆç«‹æ—¥æœŸ','æ³•å®šä»£è¡¨äºº','æ³¨å†Œèµ„æœ¬',
+                       'è¥ä¸šæœŸé™','ç™»è®°æœºå…³','å‘ç…§æ—¥æœŸ','å…¬å¸è§„æ¨¡','æ‰€å±è¡Œä¸š','è‹±æ–‡å','æ›¾ç”¨å','ä¼ä¸šåœ°å€','ç»è¥èŒƒå›´']
 
-    #ÅÀ³æ¿ªÊ¼Ç°µÄÒ»Ğ©Ô¤´¦Àí
+    #çˆ¬è™«å¼€å§‹å‰çš„ä¸€äº›é¢„å¤„ç†
     def init(self):
 
         try:
-            #ÊÔÌ½ÊÇ·ñÓĞ¸ÃexcelÎÄ¼ş£¬#»ñÈ¡ĞĞÊı£ºworkbook.sheets()[0].nrows
+            #è¯•æ¢æ˜¯å¦æœ‰è¯¥excelæ–‡ä»¶ï¼Œ#è·å–è¡Œæ•°ï¼šworkbook.sheets()[0].nrows
             readWorkbook = xlrd.open_workbook(self.excelPath)
-            self.beginRow = readWorkbook.sheets()[0].nrows #»ñÈ¡ĞĞÊı
+            self.beginRow = readWorkbook.sheets()[0].nrows #è·å–è¡Œæ•°
             self.workbook = copy(readWorkbook)
             self.table = self.workbook.get_sheet(0)
 
-        except Exception,e:
+        except Exception as e:
             print e
             self.workbook = xlwt.Workbook(encoding='utf-8')
             self.table = self.workbook.add_sheet(self.sheetName)
 
-            #´´½¨±íÍ·×Ö¶Î
+            #åˆ›å»ºè¡¨å¤´å­—æ®µ
             col = 0
             for field in self.fields:
                 self.table.write(0,col,field.decode('gbk').encode('utf-8'))
@@ -62,10 +62,10 @@ class EnterpriseInfoSpider:
 
             self.workbook.save(self.excelPath)
             self.beginRow = 1
-            print "ÒÑÔÚµ±Ç°Ä¿Â¼ÏÂ´´½¨enterprise_data.xlsÊı¾İ±í"
+            print "å·²åœ¨å½“å‰ç›®å½•ä¸‹åˆ›å»ºenterprise_data.xlsæ•°æ®è¡¨"
 
 
-    #´Ókeyword/1Ò³ µÃµ½µÄhtmlÖĞ»ñµÃ×ÜÒ³ÂëÊı
+    #ä»keyword/1é¡µ å¾—åˆ°çš„htmlä¸­è·å¾—æ€»é¡µç æ•°
     def getTotalPage(self,catalogPageCode):
         soup = BeautifulSoup(catalogPageCode,"html.parser")
         pagebar = soup.select("li #ajaxpage")
@@ -73,33 +73,33 @@ class EnterpriseInfoSpider:
             return -1
         return int(soup.select("li #ajaxpage")[-1].string.strip(' .'))
 
-    #´Ókeyword/pageÒ³ µÃµ½htmlÖĞµÄËùÓĞ¹«Ë¾ÌõÄ¿
+    #ä»keyword/pageé¡µ å¾—åˆ°htmlä¸­çš„æ‰€æœ‰å…¬å¸æ¡ç›®
     def getFirmIdDoms(self,catalogPageCode):
         soup = BeautifulSoup(catalogPageCode,"html.parser")
         return soup.select("#searchlist .table-search-list .tp2 a")
 
-    #ÅÀ³æ¿ªÊ¼
+    #çˆ¬è™«å¼€å§‹
     def start(self):
-        keyword = raw_input("ÇëÊäÈë¹Ø¼ü×Ö£º").decode("gbk").encode("utf-8")
+        keyword = raw_input("è¯·è¾“å…¥å…³é”®å­—ï¼š").decode("gbk").encode("utf-8")
         while keyword != "end":
-            #ÏÈ»ñÈ¡keywordµÚÒ»Ò³ÄÚÈİµÄÒ³Âë
+            #å…ˆè·å–keywordç¬¬ä¸€é¡µå†…å®¹çš„é¡µç 
             totalPage = self.getTotalPage(self.getCatalogPageCode(keyword, 1))
             if totalPage == -1:
-                # ÇëÇóÏÂÒ»ÂÖ²éÑ¯µÄ¹Ø¼ü×Ö
-                keyword = raw_input("ÅÀÈ¡½áÊø,ÇëÊäÈë¹Ø¼ü×Ö£º").decode("gbk").encode("utf-8")
+                # è¯·æ±‚ä¸‹ä¸€è½®æŸ¥è¯¢çš„å…³é”®å­—
+                keyword = raw_input("çˆ¬å–ç»“æŸ,è¯·è¾“å…¥å…³é”®å­—ï¼š").decode("gbk").encode("utf-8")
                 continue
 
-            #Ä£Äâ·­Ò³²Ù×÷
+            #æ¨¡æ‹Ÿç¿»é¡µæ“ä½œ
             for page in range(1,totalPage+1):
 
-                print "ÕıÔÚÅÀÈ¡µÚ",page,"Ò³µÄÊı¾İ,ÇëÉÔµÈ..."
+                print "æ­£åœ¨çˆ¬å–ç¬¬",page,"é¡µçš„æ•°æ®,è¯·ç¨ç­‰..."
 
-                #»ñÈ¡µÚpageÒ³´úÂë
+                #è·å–ç¬¬pageé¡µä»£ç 
                 catalogPageCode = self.getCatalogPageCode(keyword,page)
                 firmIdDoms = self.getFirmIdDoms(catalogPageCode)
                 for firmIdDom in firmIdDoms:
                     firmId = firmIdDom['href'][6:-6]
-                    companyname = "" #¹«Ë¾Ãû
+                    companyname = "" #å…¬å¸å
                     for string in firmIdDom.strings:
                         companyname += string
 
@@ -109,22 +109,22 @@ class EnterpriseInfoSpider:
                     phone = ""
                     email = ""
                     if phoneDom != None and phoneDom != []:
-                        phone = phoneDom[0].next_sibling.strip() #ÊÖ»ú
+                        phone = phoneDom[0].next_sibling.strip() #æ‰‹æœº
                     if emailDom != None and emailDom != []:
-                        email = emailDom[0].next_sibling.strip() #ÓÊÏä
+                        email = emailDom[0].next_sibling.strip() #é‚®ç®±
 
                     detailsPageCode = self.getDetailsPageCode(firmId,companyname)
                     self.writeDetailsToExcel(detailsPageCode,companyname,phone,email)
-                    time.sleep(0.3) #0.5sºóÔÙÅÀ·ÀÖ¹·´ÅÀ³æ»úÖÆ
+                    time.sleep(0.3) #0.5såå†çˆ¬é˜²æ­¢åçˆ¬è™«æœºåˆ¶
 
-            #ÇëÇóÏÂÒ»ÂÖ²éÑ¯µÄ¹Ø¼ü×Ö
-            keyword = raw_input("ÅÀÈ¡½áÊø,ÇëÊäÈë¹Ø¼ü×Ö£º").decode("gbk").encode("utf-8")
+            #è¯·æ±‚ä¸‹ä¸€è½®æŸ¥è¯¢çš„å…³é”®å­—
+            keyword = raw_input("çˆ¬å–ç»“æŸ,è¯·è¾“å…¥å…³é”®å­—ï¼š").decode("gbk").encode("utf-8")
 
-        print "ÅÀ³æÒÑÍêÈ«½áÊø£¡"
+        print "çˆ¬è™«å·²å®Œå…¨ç»“æŸï¼"
 
-    #¸ù¾İkeywordºÍpage¹¹Ôì²éÑ¯´®
-    #ÆäÖĞkeywordÖĞµÄ¿Õ¸ñ»»³É+
-    #·µ»Ø²éÑ¯×Ö·û´®¹¹³ÉµÄ×Öµä
+    #æ ¹æ®keywordå’Œpageæ„é€ æŸ¥è¯¢ä¸²
+    #å…¶ä¸­keywordä¸­çš„ç©ºæ ¼æ¢æˆ+
+    #è¿”å›æŸ¥è¯¢å­—ç¬¦ä¸²æ„æˆçš„å­—å…¸
     def getCatalogQueryString(self,keyword,page):
         keyword.replace(' ','+')
         return {"key": keyword, "index": "0", "p": page}
@@ -132,19 +132,19 @@ class EnterpriseInfoSpider:
     def getDetailQueryString(self,firmId,companyname):
         return {"unique": firmId, "companyname":companyname,"tab": "base"}
 
-    # ¸ù¾İkeyword¹Ø¼ü×Ö»ñÈ¡Ä¿Â¼Ò³´úÂë
+    # æ ¹æ®keywordå…³é”®å­—è·å–ç›®å½•é¡µä»£ç 
     def getCatalogPageCode(self, keyword, page):
         queryString = self.getCatalogQueryString(keyword, page)
         response = requests.request("GET", self.catalogUrl, headers=self.headers, params=queryString)
         return response.text
 
-    # ¸ù¾İfirmId»ñÈ¡¹«Ë¾µÄÏêÇéÒ³´úÂë
+    # æ ¹æ®firmIdè·å–å…¬å¸çš„è¯¦æƒ…é¡µä»£ç 
     def getDetailsPageCode(self,firmId,companyname):
         queryString = self.getDetailQueryString(firmId,companyname)
         response = requests.request("GET", self.detailsUrl, headers=self.headers, params=queryString)
         return response.text
 
-    #×¥È¡detailsPageCodeÒ³ÉÏ¸ÃÆóÒµËùÓĞĞÅÏ¢£¬²¢´æÈëexcel
+    #æŠ“å–detailsPageCodeé¡µä¸Šè¯¥ä¼ä¸šæ‰€æœ‰ä¿¡æ¯ï¼Œå¹¶å­˜å…¥excel
     def writeDetailsToExcel(self,detailsPageCode,companyname,phone,email):
         detailDoms = self.getDetailDoms(detailsPageCode)
 
@@ -157,17 +157,17 @@ class EnterpriseInfoSpider:
             detailName = detailDom.label.string.strip()[:-1]
             detailValue = detailDom.label.next_sibling.string.strip()
             while col < len(self.fields):
-                # ÕÒµ½Æ¥ÅäµÄÄÇÁĞ×Ö¶Î
+                # æ‰¾åˆ°åŒ¹é…çš„é‚£åˆ—å­—æ®µ
                 if detailName == self.fields[col].decode('gbk'):
-                    self.table.write(self.beginRow, col, detailValue) #Ğ´Èëexcel
+                    self.table.write(self.beginRow, col, detailValue) #å†™å…¥excel
                     col += 1
                     break
                 else:
                     col += 1
-        self.workbook.save(self.excelPath)  # ±£´æÖÁÎÄ¼ş
+        self.workbook.save(self.excelPath)  # ä¿å­˜è‡³æ–‡ä»¶
         self.beginRow += 1
 
-    #¸ù¾İdetailsPageCode»ñµÃËüµÄËùÓĞdetailDomsÔªËØ
+    #æ ¹æ®detailsPageCodeè·å¾—å®ƒçš„æ‰€æœ‰detailDomså…ƒç´ 
     def getDetailDoms(self,detailsPageCode):
         soup = BeautifulSoup(detailsPageCode,"html.parser")
         return soup.select(".company-base li")
@@ -175,7 +175,7 @@ class EnterpriseInfoSpider:
 
 
 ########
-#ÅÀ³æÈë¿Ú
+#çˆ¬è™«å…¥å£
 ########
 spider = EnterpriseInfoSpider()
 spider.init()
